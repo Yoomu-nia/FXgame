@@ -99,6 +99,6 @@ export const DIFFICULTY_ORDER = ["normal", "hard", "extreme"];
  */
 export const SOCIAL_LINKS = [
   { id: "bilibili", label: "Bilibili", icon: "tv", url: "" },
-  { id: "github", label: "GitHub", icon: "branch", url: "" },
+  { id: "github", label: "GitHub", icon: "branch", url: "https://github.com/Yoomu-nia/FXgame" },
   { id: "email", label: "Email", icon: "mail", url: "" },
 ];
