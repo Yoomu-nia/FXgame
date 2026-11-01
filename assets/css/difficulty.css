@@ -1,0 +1,186 @@
+/* ==========================================================================
+   difficulty.css — 难度选择页（文档 §8.2）
+   ========================================================================== */
+
+.difficulty {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(18px, 3vh, 30px);
+  width: min(1040px, 100%);
+  margin: 0 auto;
+  padding: clamp(20px, 4vh, 44px) var(--s-4);
+  overflow-y: auto;
+}
+
+.difficulty__head {
+  text-align: center;
+}
+
+.difficulty__eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  color: var(--c-ink-faint);
+  text-transform: uppercase;
+}
+
+.difficulty__title {
+  margin-top: 6px;
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--c-ink);
+}
+
+.difficulty__hint {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--c-ink-soft);
+}
+
+/* ---------- 卡片区 ---------- */
+.difficulty__cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(10px, 1.6vw, 18px);
+  align-items: stretch;
+}
+
+.diffcard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* 顶部留白固定，保证三张卡的标题在同一水平线上（推荐角标是绝对定位的） */
+  padding: 42px 18px 16px;
+  text-align: left;
+  border: 1.5px solid var(--c-line);
+  border-radius: var(--r-lg);
+  background: #ffffff;
+  color: var(--c-ink);
+  cursor: pointer;
+  transition: transform var(--t-fast), border-color var(--t-base),
+    box-shadow var(--t-base), background-color var(--t-base);
+}
+
+.diffcard:hover {
+  transform: translateY(-3px);
+  border-color: var(--c-pink);
+  box-shadow: 0 20px 36px -26px rgba(236, 143, 182, 0.95);
+}
+
+.diffcard.is-selected {
+  border-color: var(--c-pink-deep);
+  border-width: 2px;
+  background: linear-gradient(180deg, #fffafd 0%, #ffffff 60%);
+  box-shadow: 0 24px 44px -28px rgba(236, 143, 182, 0.95);
+}
+
+/* 选中标记 */
+.diffcard.is-selected::after {
+  content: "";
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--c-pink-deep)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 13l4 4 10-10'/%3E%3C/svg%3E")
+    center / 11px no-repeat;
+  box-shadow: 0 4px 10px -4px rgba(236, 143, 182, 1);
+}
+
+/* 推荐角标 */
+.diffcard__badge {
+  position: absolute;
+  top: 14px;
+  left: 18px;
+  padding: 2px 9px;
+  border-radius: var(--r-pill);
+  background: linear-gradient(135deg, var(--c-pink) 0%, var(--c-lilac) 100%);
+  color: #4a2334;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.diffcard__head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.diffcard__name {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.diffcard__en {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--c-ink-faint);
+}
+
+.diffcard__desc {
+  /* 预留两行高度，保证三张卡的参数表从同一水平线开始 */
+  min-height: 3em;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--c-ink-soft);
+}
+
+.diffcard__stats {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+  border-top: 1px dashed #f2e2ec;
+  padding-top: 10px;
+}
+
+.diffcard__stat {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.diffcard__statlabel {
+  font-size: 11.5px;
+  color: var(--c-ink-faint);
+  letter-spacing: 0.02em;
+}
+
+.diffcard__statvalue {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--c-ink);
+}
+
+/* ---------- 底部按钮 ---------- */
+.difficulty__foot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+}
+
+.difficulty__foot .btn--lg {
+  min-width: 200px;
+}
+
+/* 窄屏：卡片改单列 */
+@media (max-width: 860px) {
+  .difficulty__cards {
+    grid-template-columns: 1fr;
+  }
+  .diffcard__desc {
+    min-height: 0;
+  }
+}

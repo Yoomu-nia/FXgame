@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>K线♡过山车</title>
+  <meta name="description" content="K线过山车：单人外汇杠杆模拟交易网页小游戏（虚拟资金，非真实交易）。" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%F0%9F%92%97%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="stylesheet" href="assets/css/home.css" />
+  <link rel="stylesheet" href="assets/css/difficulty.css" />
+  <link rel="stylesheet" href="assets/css/trade.css" />
+  <link rel="stylesheet" href="assets/css/gameover.css" />
+</head>
+<body>
+  <!-- 背景装饰层：柔和渐变色块 + 星星，纯装饰，不参与交互 -->
+  <div class="bg-decor" aria-hidden="true">
+    <span class="bg-decor__blob bg-decor__blob--pink"></span>
+    <span class="bg-decor__blob bg-decor__blob--lilac"></span>
+    <span class="bg-decor__blob bg-decor__blob--mint"></span>
+    <span class="bg-decor__spark" style="--x: 8%;  --y: 16%; --s: 9px;  --delay: 0s"></span>
+    <span class="bg-decor__spark" style="--x: 22%; --y: 72%; --s: 6px;  --delay: 1.4s"></span>
+    <span class="bg-decor__spark" style="--x: 46%; --y: 9%;  --s: 5px;  --delay: 2.6s"></span>
+    <span class="bg-decor__spark" style="--x: 63%; --y: 84%; --s: 8px;  --delay: 0.8s"></span>
+    <span class="bg-decor__spark" style="--x: 81%;  --y: 22%; --s: 6px;  --delay: 3.2s"></span>
+    <span class="bg-decor__spark" style="--x: 92%; --y: 62%; --s: 5px;  --delay: 1.9s"></span>
+  </div>
+
+  <main id="app" class="app-shell">
+
+    <!-- ========== 屏幕：首页 ========== -->
+    <section class="screen screen--home is-active" data-screen="home" aria-label="首页">
+      <div class="home">
+        <div class="home__card">
+
+          <!-- 装饰性 K 线，仅视觉用途 -->
+          <svg class="home__candles" viewBox="0 0 264 76" role="presentation" aria-hidden="true" focusable="false">
+            <g stroke-linecap="round" stroke-width="2">
+              <line class="ck-wick ck-wick--up"   x1="24"  y1="14" x2="24"  y2="66" />
+              <rect class="ck-body ck-body--up"   x="17"  y="30" width="14" height="26" rx="4" />
+              <line class="ck-wick ck-wick--down" x1="64"  y1="8"  x2="64"  y2="58" />
+              <rect class="ck-body ck-body--down" x="57"  y="20" width="14" height="26" rx="4" />
+              <line class="ck-wick ck-wick--up"   x1="104" y1="6"  x2="104" y2="52" />
+              <rect class="ck-body ck-body--up"   x="97"  y="14" width="14" height="30" rx="4" />
+              <line class="ck-wick ck-wick--down" x1="144" y1="18" x2="144" y2="70" />
+              <rect class="ck-body ck-body--down" x="137" y="30" width="14" height="28" rx="4" />
+              <line class="ck-wick ck-wick--up"   x1="184" y1="10" x2="184" y2="60" />
+              <rect class="ck-body ck-body--up"   x="177" y="22" width="14" height="24" rx="4" />
+              <line class="ck-wick ck-wick--up"   x1="224" y1="4"  x2="224" y2="48" />
+              <rect class="ck-body ck-body--up"   x="217" y="12" width="14" height="26" rx="4" />
+            </g>
+          </svg>
+
+          <p class="home__eyebrow" data-copy="eyebrow"></p>
+
+          <h1 class="home__logo">
+            <span class="home__logo-fx" data-copy="logoLeft"></span><span class="home__logo-heart" data-copy="logoHeart"></span><span class="home__logo-life" data-copy="logoRight"></span>
+          </h1>
+          <p class="home__subtitle" data-copy="subtitle"></p>
+          <p class="home__tagline" data-copy="tagline"></p>
+
+          <div class="home__actions">
+            <button class="btn btn--primary btn--lg" type="button" data-action="start" data-copy="startLabel"></button>
+            <div class="home__actions-row">
+              <button class="btn btn--secondary" type="button" data-action="rules" data-copy="rulesLabel"></button>
+              <button class="btn btn--ghost" type="button" data-action="history" data-copy="historyLabel"></button>
+            </div>
+          </div>
+
+          <!-- 外链图标位：内容由 config.js 的 SOCIAL_LINKS 渲染，链接留空时显示为占位态 -->
+          <div class="home__social" id="home-social" aria-label="外部链接"></div>
+
+          <!-- 本地存档里的历史最佳一局（没有存档时隐藏） -->
+          <p class="home__best" data-home="best" hidden></p>
+
+          <p class="home__footnote" data-copy="footnote"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== 屏幕：难度选择 ========== -->
+    <section class="screen screen--difficulty" data-screen="difficulty" aria-label="难度选择">
+      <div class="difficulty">
+        <header class="difficulty__head">
+          <p class="difficulty__eyebrow">DIFFICULTY</p>
+          <h2 class="difficulty__title" data-copy="difficultyTitle"></h2>
+          <p class="difficulty__hint" data-copy="difficultyHint"></p>
+        </header>
+
+        <!-- 三档难度卡片由 difficulty.js 按 config.js 的 DIFFICULTIES 渲染 -->
+        <div class="difficulty__cards" id="difficulty-cards" role="radiogroup" aria-label="难度"></div>
+
+        <footer class="difficulty__foot">
+          <button class="btn btn--ghost" type="button" data-difficulty-action="back" data-copy="difficultyBack"></button>
+          <button class="btn btn--primary btn--lg" type="button" data-difficulty-action="start" data-copy="difficultyStart"></button>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ========== 屏幕：交易主界面（文档 §8.3 布局） ========== -->
+    <section class="screen screen--trade" data-screen="trade" aria-label="交易界面">
+      <div class="trade">
+
+        <!-- 顶部状态栏：货币对 / 当前价格 / 倒计时 -->
+        <header class="trade__bar">
+          <button class="btn btn--ghost btn--sm trade__exit" type="button" data-trade-action="exit" data-copy="tradeExit"></button>
+
+          <div class="trade__pair">
+            <span class="trade__symbol num" data-trade="symbol">—</span>
+            <span class="trade__pairname" data-trade="pairName"></span>
+          </div>
+
+          <div class="trade__price">
+            <span class="trade__pricevalue num" data-trade="price">—</span>
+            <span class="trade__pricechange num"><span data-trade="change">—</span></span>
+          </div>
+
+          <div class="trade__chips">
+            <span class="chip chip--round" data-trade="round">—</span>
+            <span class="chip chip--accent" data-trade="difficulty"></span>
+            <button class="chip chip--seed" type="button" data-trade-action="copy-seed" title="点击复制随机种子">
+              <span data-copy="tradeSeedLabel"></span><b class="num" data-trade="seed">—</b>
+            </button>
+          </div>
+
+          <div class="trade__timer" data-trade="timerBox">
+            <span class="trade__timerlabel" data-label="timer"></span>
+            <span class="trade__timervalue num" data-trade="timer">60.0</span>
+          </div>
+        </header>
+
+        <!-- 主区：行情 + 右侧下单面板（账户金额在下单面板内） -->
+        <div class="trade__main">
+
+          <div class="trade__chartwrap">
+            <div class="trade__chart" id="trade-chart"></div>
+            <span class="trade__stopbadge" data-trade="stopBadge" hidden></span>
+            <span class="trade__revealbar"><i data-trade="revealFill"></i></span>
+          </div>
+
+          <aside class="panel panel--order" aria-label="交易面板">
+            <h2 class="panel__title" data-copy="orderPanelTitle"></h2>
+
+            <div class="side-toggle" role="group" aria-label="交易方向">
+              <button type="button" data-side="long" aria-pressed="false" data-copy="longLabel"></button>
+              <button type="button" data-side="short" aria-pressed="false" data-copy="shortLabel"></button>
+            </div>
+
+            <div class="field">
+              <span class="field__label" data-label="leverage"></span>
+              <div class="leverage" id="leverage-chips" role="group" aria-label="杠杆"></div>
+            </div>
+
+            <div class="field">
+              <div class="field__head">
+                <span class="field__label" data-label="ratio"></span>
+                <b class="num" data-trade="ratioValue">50%</b>
+              </div>
+              <input class="range" type="range" id="margin-range" min="5" max="100" step="5" value="50"
+                     aria-label="投入保证金比例" />
+              <div class="field__hint">
+                <span data-label="marginAmount"></span>
+                <b class="num" data-trade="marginAmount">—</b>
+                <span>USD</span>
+              </div>
+              <div class="field__hint">
+                <span data-label="notional"></span>
+                <b class="num" data-trade="notional">—</b>
+                <span>USD</span>
+              </div>
+            </div>
+
+            <button class="btn btn--primary btn--block" type="button" data-trade="open" data-trade-action="open" data-copy="openPosition"></button>
+
+            <!-- 账户金额：放在开仓按钮下方 -->
+            <div class="moneybox" aria-label="账户金额">
+              <div class="moneybox__row moneybox__row--main">
+                <span class="moneybox__label" data-label="balance"></span>
+                <b class="moneybox__value num" data-trade="balance">—</b>
+              </div>
+              <div class="moneybox__row moneybox__row--main">
+                <span class="moneybox__label" data-label="floating"></span>
+                <b class="moneybox__value moneybox__value--pnl num" data-trade="floating">—</b>
+              </div>
+              <div class="moneybox__row">
+                <span class="moneybox__label" data-label="available"></span>
+                <b class="num" data-trade="available">—</b>
+              </div>
+              <div class="moneybox__row">
+                <span class="moneybox__label" data-label="marginUsed"></span>
+                <b class="num" data-trade="marginUsed">—</b>
+              </div>
+              <div class="moneybox__row">
+                <span class="moneybox__label" data-label="equity"></span>
+                <b class="num" data-trade="equity">—</b>
+              </div>
+              <div class="moneybox__row">
+                <span class="moneybox__label" data-label="realized"></span>
+                <b class="num" data-trade="realized">—</b>
+              </div>
+            </div>
+
+            <p class="panel__note" data-copy="orderNote"></p>
+          </aside>
+        </div>
+
+        <!-- 底部状态条：交易状态 + 平仓 -->
+        <footer class="trade__foot">
+          <div class="trade__stats">
+            <span class="trade__stat"><i data-label="entryPrice"></i><b class="num" data-trade="entryPrice">—</b></span>
+            <span class="trade__stat"><i data-label="currentPrice"></i><b class="num" data-trade="currentPrice">—</b></span>
+            <span class="trade__stat"><i data-label="stopPrice"></i><b class="num trade__stop" data-trade="footStop">—</b></span>
+            <span class="trade__stat"><i data-label="notional"></i><b class="num" data-trade="footNotional">—</b></span>
+            <span class="trade__stat trade__stat--pnl"><i data-label="floating"></i><b class="num" data-trade="footPnl">—</b></span>
+          </div>
+
+          <button class="btn btn--danger trade__close" type="button" data-trade="close" data-trade-action="close" data-copy="closePosition" disabled></button>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ========== 屏幕：一局结束 ========== -->
+    <section class="screen screen--gameover" data-screen="gameover" aria-label="一局结束">
+      <div class="gameover">
+        <header class="gameover__head">
+          <p class="gameover__eyebrow">GAME OVER</p>
+          <h2 class="gameover__title" data-copy="gameoverTitle"></h2>
+          <p class="gameover__reason" data-gameover="reason"></p>
+          <p class="gameover__amount num" data-gameover="amount">—</p>
+          <p class="gameover__sub" data-gameover="sub"></p>
+        </header>
+
+        <dl class="board board--wide">
+          <div class="board__item"><dt data-label="initialBalance"></dt><dd class="num" data-gameover="initialBalance">—</dd></div>
+          <div class="board__item"><dt data-label="finalBalance"></dt><dd class="num" data-gameover="finalBalance">—</dd></div>
+          <div class="board__item"><dt data-label="totalPnl"></dt><dd class="num" data-gameover="totalPnl">—</dd></div>
+          <div class="board__item"><dt data-label="roundsPlayed"></dt><dd class="num" data-gameover="rounds">—</dd></div>
+          <div class="board__item"><dt data-label="winRounds"></dt><dd class="num" data-gameover="wins">—</dd></div>
+          <div class="board__item"><dt data-label="lossRounds"></dt><dd class="num" data-gameover="losses">—</dd></div>
+          <div class="board__item"><dt data-label="winRate"></dt><dd class="num" data-gameover="winRate">—</dd></div>
+          <div class="board__item"><dt data-label="bestRound"></dt><dd class="num" data-gameover="best">—</dd></div>
+          <div class="board__item"><dt data-label="worstRound"></dt><dd class="num" data-gameover="worst">—</dd></div>
+          <div class="board__item"><dt data-label="maxWinStreak"></dt><dd class="num" data-gameover="maxWinStreak">—</dd></div>
+          <div class="board__item"><dt data-label="maxLossStreak"></dt><dd class="num" data-gameover="maxLossStreak">—</dd></div>
+        </dl>
+
+        <footer class="gameover__foot">
+          <button class="btn btn--ghost" type="button" data-gameover-action="home" data-copy="resultHome"></button>
+          <button class="btn btn--primary btn--lg" type="button" data-gameover-action="again" data-copy="gameoverAgain"></button>
+        </footer>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 通用信息弹窗（原生 dialog，可键盘操作、Esc 关闭） -->
+  <dialog id="info-dialog" class="dialog" aria-labelledby="info-dialog-title">
+    <div class="dialog__head">
+      <h2 id="info-dialog-title" class="dialog__title">标题</h2>
+      <button class="dialog__close" type="button" data-dialog-close aria-label="关闭">✕</button>
+    </div>
+    <div class="dialog__scroll" id="info-dialog-scroll">
+      <div class="dialog__body" id="info-dialog-body"></div>
+    </div>
+    <div class="dialog__foot">
+      <button class="btn btn--secondary" type="button" data-dialog-close>知道了</button>
+    </div>
+  </dialog>
+
+  <!-- 每回合结束的结算已改成独立页面（screen--result），这里只留通用弹窗 -->
+
+  <!-- 平仓确认弹窗（确认期间行情与倒计时暂停） -->
+  <dialog id="confirm-dialog" class="dialog dialog--confirm" aria-labelledby="confirm-dialog-title">
+    <div class="dialog__head">
+      <h2 id="confirm-dialog-title" class="dialog__title" data-copy="confirmCloseTitle"></h2>
+    </div>
+    <div class="dialog__scroll">
+      <div class="dialog__body">
+        <p class="confirm__lead" data-copy="confirmCloseLead"></p>
+        <dl class="result__grid">
+          <div><dt data-label="side"></dt><dd data-confirm="side">—</dd></div>
+          <div><dt data-label="leverage"></dt><dd class="num" data-confirm="leverage">—</dd></div>
+          <div><dt data-label="entryPrice"></dt><dd class="num" data-confirm="entryPrice">—</dd></div>
+          <div><dt data-label="currentPrice"></dt><dd class="num" data-confirm="currentPrice">—</dd></div>
+          <div class="result__grid--wide"><dt data-label="floating"></dt><dd class="num" data-confirm="floating">—</dd></div>
+        </dl>
+        <p class="confirm__note" data-copy="confirmCloseNote"></p>
+      </div>
+    </div>
+    <div class="dialog__foot dialog__foot--split">
+      <button class="btn btn--ghost" type="button" data-confirm-action="cancel" data-copy="confirmCloseNo"></button>
+      <button class="btn btn--danger" type="button" data-confirm-action="confirm" data-copy="confirmCloseYes"></button>
+    </div>
+  </dialog>
+
+  <!-- 强制平仓弹窗（文档 §8.4 要求展示的字段全部在此） -->
+  <dialog id="liquidate-dialog" class="dialog dialog--liquidate" aria-labelledby="liquidate-dialog-title">
+    <div class="dialog__head dialog__head--alert">
+      <h2 id="liquidate-dialog-title" class="dialog__title" data-copy="liquidateTitle"></h2>
+    </div>
+    <div class="dialog__scroll">
+      <div class="dialog__body">
+        <p class="liq__lead" data-copy="liquidateLead"></p>
+
+        <dl class="liq__grid">
+          <div><dt data-label="floatingLoss"></dt><dd class="num value-loss" data-liq="loss">—</dd></div>
+          <div><dt data-label="cumMargin"></dt><dd class="num" data-liq="cumMargin">—</dd></div>
+          <div><dt data-label="stopLoss"></dt><dd class="num value-loss" data-liq="stopLoss">—</dd></div>
+          <div><dt data-label="stopPrice"></dt><dd class="num value-loss" data-liq="stopPrice">—</dd></div>
+          <div class="liq__grid--wide"><dt data-label="available"></dt><dd class="num" data-liq="available">—</dd></div>
+        </dl>
+
+        <div class="liq__add">
+          <div class="field__head">
+            <span class="field__label" data-label="addAmount"></span>
+            <b class="num" data-liq="amount">—</b>
+          </div>
+          <input class="range" type="range" id="liquidate-range" min="0" max="0" step="1"
+                 aria-label="追加保证金金额" />
+          <div class="liq__quick">
+            <button class="btn btn--secondary btn--sm" type="button" data-liq-quick="quarter" data-copy="quickQuarter"></button>
+            <button class="btn btn--secondary btn--sm" type="button" data-liq-quick="half" data-copy="quickHalf"></button>
+            <button class="btn btn--secondary btn--sm" type="button" data-liq-quick="max" data-copy="quickMax"></button>
+          </div>
+          <dl class="liq__grid liq__grid--after">
+            <div><dt data-label="afterMargin"></dt><dd class="num" data-liq="afterMargin">—</dd></div>
+            <div><dt data-label="afterStopLoss"></dt><dd class="num" data-liq="afterStopLoss">—</dd></div>
+            <div class="liq__grid--wide"><dt data-label="afterStopPrice"></dt><dd class="num" data-liq="afterStopPrice">—</dd></div>
+          </dl>
+          <p class="liq__fillnote">
+            <span data-label="fillLoss"></span>
+            <b class="num value-loss" data-liq="fillLoss">—</b>
+            <span data-copy="fillLossNote"></span>
+          </p>
+          <p class="liq__nofunds" data-liq="noFunds" hidden data-copy="noFundsHint"></p>
+        </div>
+
+        <p class="liq__choice" data-copy="liquidateChoice"></p>
+      </div>
+    </div>
+    <div class="dialog__foot dialog__foot--split">
+      <button class="btn btn--danger" type="button" data-liq-action="end" data-copy="endTradeButton"></button>
+      <button class="btn btn--primary" type="button" data-liq-action="add" data-copy="addMarginButton"></button>
+    </div>
+  </dialog>
+
+  <!-- 放弃本局确认（中途回首页时） -->
+  <dialog id="abandon-dialog" class="dialog dialog--confirm" aria-labelledby="abandon-dialog-title">
+    <div class="dialog__head">
+      <h2 id="abandon-dialog-title" class="dialog__title" data-copy="abandonTitle"></h2>
+    </div>
+    <div class="dialog__scroll">
+      <div class="dialog__body">
+        <p class="confirm__lead" data-copy="abandonLead"></p>
+      </div>
+    </div>
+    <div class="dialog__foot dialog__foot--split">
+      <button class="btn btn--ghost" type="button" data-abandon-action="cancel" data-copy="abandonNo"></button>
+      <button class="btn btn--danger" type="button" data-abandon-action="confirm" data-copy="abandonYes"></button>
+    </div>
+  </dialog>
+
+  <!-- 轻提示容器 -->
+  <div id="toast-root" class="toast-root" role="status" aria-live="polite"></div>
+
+  <!-- K 线图库：本地文件，先于模块脚本加载，暴露全局 LightweightCharts -->
+  <script src="vendor/lightweight-charts.standalone.production.js"></script>
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>

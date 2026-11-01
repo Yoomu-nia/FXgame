@@ -1,0 +1,788 @@
+/* ==========================================================================
+   trade.css — 交易主界面（文档 §8.3）
+   顶部状态栏 / 左侧账户面板 / 中央 K 线 / 右侧交易面板 / 底部交易状态
+   ========================================================================== */
+
+.trade {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-2);
+  padding: 10px 14px 12px;
+}
+
+/* ---------- 顶部状态栏 ---------- */
+.trade__bar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 14px;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  background: #ffffff;
+  box-shadow: 0 14px 26px -24px rgba(41, 35, 49, 0.6);
+}
+
+.trade__exit {
+  flex: 0 0 auto;
+}
+
+.trade__pair {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.trade__symbol {
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.trade__pairname {
+  font-size: 11.5px;
+  color: var(--c-ink-faint);
+  white-space: nowrap;
+}
+
+.trade__price {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.trade__pricevalue {
+  font-size: 21px;
+  font-weight: 800;
+  color: var(--c-ink);
+}
+
+.trade__pricechange {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.trade__chips {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+/* ---------- 小标签 chip ---------- */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--c-line);
+  background: #fffafd;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--c-ink-soft);
+  white-space: nowrap;
+}
+
+.chip--accent {
+  border-color: #f5d3e3;
+  background: linear-gradient(135deg, #fff1f7 0%, #f7f1ff 100%);
+  color: #7a4a63;
+}
+
+.chip--seed {
+  font-family: var(--font-num);
+  letter-spacing: 0.04em;
+  color: var(--c-ink-faint);
+  cursor: pointer;
+  transition: border-color var(--t-base), color var(--t-base), background-color var(--t-base);
+}
+
+.chip--seed:hover {
+  border-color: var(--c-lilac);
+  color: var(--c-ink-soft);
+  background: #faf6ff;
+}
+
+.chip--seed b {
+  color: var(--c-ink);
+  font-weight: 700;
+}
+
+/* ---------- 倒计时 ---------- */
+.trade__timer {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--r-pill);
+  border: 1px solid #f7dbe8;
+  background: #fff3f8;
+  transition: background-color var(--t-base), border-color var(--t-base);
+}
+
+.trade__timerlabel {
+  font-size: 11px;
+  color: var(--c-ink-faint);
+}
+
+.trade__timervalue {
+  font-size: 19px;
+  font-weight: 800;
+  color: var(--c-ink);
+  min-width: 3.2em;
+  text-align: right;
+}
+
+/* 最后 10 秒：红色提醒（配合数值本身，不只靠颜色） */
+.trade__timer.is-urgent {
+  background: #fdeef1;
+  border-color: #f4bcc7;
+}
+
+.trade__timer.is-urgent .trade__timervalue,
+.trade__timer.is-urgent .trade__timerlabel {
+  color: var(--c-loss);
+}
+
+/* 未开仓：倒计时不动，视觉上淡一点 */
+.trade__timer.is-idle {
+  background: #faf6f9;
+  border-color: var(--c-line);
+}
+
+.trade__timer.is-idle .trade__timervalue {
+  color: var(--c-ink-faint);
+}
+
+/* ---------- 主区：中行情 / 右交易 ---------- */
+.trade__main {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 286px;
+  gap: var(--s-2);
+}
+
+/* ---------- 侧边面板 ---------- */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  background: #ffffff;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.panel__title {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--c-ink-faint);
+}
+
+/* ---------- 开仓按钮下方的账户金额（不加外框，直接排在下面） ---------- */
+.moneybox {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+.moneybox__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 11.5px;
+  color: var(--c-ink-faint);
+}
+
+.moneybox__row b {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--c-ink);
+  white-space: nowrap;
+}
+
+/* 余额与浮动盈亏用大一号的字，一条细分隔线把它们和下面的小项分开 */
+.moneybox__row--main .moneybox__label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--c-ink-soft);
+}
+
+.moneybox__row--main + .moneybox__row--main {
+  padding-bottom: 5px;
+  margin-bottom: 2px;
+  border-bottom: 1px dashed #f4e6ee;
+}
+
+.moneybox__value {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--c-ink);
+}
+
+.moneybox__value--pnl {
+  font-size: 15px;
+}
+
+.panel__note {
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px dashed #f4e6ee;
+  font-size: 10.5px;
+  line-height: 1.5;
+  color: var(--c-ink-faint);
+}
+
+/* ---------- 图表区 ---------- */
+.trade__chartwrap {
+  position: relative;
+  min-height: 0;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  background: #ffffff;
+  box-shadow: 0 18px 34px -30px rgba(41, 35, 49, 0.5);
+  overflow: hidden;
+}
+
+.trade__chart {
+  position: absolute;
+  inset: 0;
+}
+
+/* 强平线在可视范围之外时的角标提示 */
+.trade__stopbadge {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  background: rgba(232, 93, 117, 0.1);
+  border: 1px solid rgba(232, 93, 117, 0.35);
+  color: #b23148;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
+/* 底部极细的揭示进度条 */
+.trade__revealbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: rgba(245, 169, 200, 0.16);
+  pointer-events: none;
+}
+
+.trade__revealbar i {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--c-pink) 0%, var(--c-lilac) 100%);
+  transition: width 220ms linear;
+}
+
+/* ---------- 右侧下单面板 ---------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.field__label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--c-ink-soft);
+}
+
+.field__head b {
+  font-size: 13px;
+  color: var(--c-ink);
+}
+
+.field__hint {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  font-size: 10.5px;
+  color: var(--c-ink-faint);
+}
+
+.field__hint b {
+  font-size: 12px;
+  color: var(--c-ink);
+  font-weight: 700;
+}
+
+/* 方向切换 */
+.side-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.side-toggle button {
+  padding: 9px 6px;
+  border: 1.5px solid var(--c-line);
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--c-ink-soft);
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: border-color var(--t-base), background-color var(--t-base), color var(--t-base);
+}
+
+.side-toggle button[data-side="long"][aria-pressed="true"] {
+  border-color: var(--c-profit);
+  background: #eef8f3;
+  color: #2c7a5f;
+}
+
+.side-toggle button[data-side="short"][aria-pressed="true"] {
+  border-color: var(--c-loss);
+  background: #fdeef1;
+  color: #b23148;
+}
+
+.side-toggle button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* 杠杆档位 */
+.leverage {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.leverage button {
+  padding: 7px 0;
+  border: 1px solid var(--c-line);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--c-ink-soft);
+  font-family: var(--font-num);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color var(--t-base), background-color var(--t-base), color var(--t-base);
+}
+
+.leverage button.is-active {
+  border-color: var(--c-lilac-deep);
+  background: #f6f1ff;
+  color: #5b4680;
+}
+
+.leverage button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* 比例滑块（自定义外观，保证和主题一致；--fill 由 JS 设置已选比例） */
+.range {
+  --fill: 50%;
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 22px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.range::-webkit-slider-runnable-track {
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: linear-gradient(
+    90deg,
+    var(--c-pink) 0%,
+    var(--c-lilac) var(--fill),
+    #f6ecf2 var(--fill),
+    #f6ecf2 100%
+  );
+}
+
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -5px;
+  border-radius: 50%;
+  border: 2px solid var(--c-pink-deep);
+  background: #ffffff;
+  box-shadow: 0 3px 8px -3px rgba(236, 143, 182, 0.95);
+  transition: transform var(--t-fast);
+}
+
+.range:hover::-webkit-slider-thumb {
+  transform: scale(1.08);
+}
+
+.range::-moz-range-track {
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: #f6ecf2;
+}
+
+.range::-moz-range-progress {
+  height: 8px;
+  border-radius: var(--r-pill);
+  background: linear-gradient(90deg, var(--c-pink) 0%, var(--c-lilac) 100%);
+}
+
+.range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--c-pink-deep);
+  background: #ffffff;
+}
+
+.range:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* 下单/平仓按钮 */
+.panel--order .btn--block {
+  margin-top: 2px;
+}
+
+/* ---------- 底部状态条：左交易状态 / 右账户金额 ---------- */
+.trade__foot {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 14px;
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-md);
+  background: #ffffff;
+  min-height: 62px;
+}
+
+.trade__stats {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.trade__stat {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--c-ink-faint);
+  white-space: nowrap;
+}
+
+.trade__stat b {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--c-ink);
+}
+
+/* 底部状态条里的强平价用红色，和图表上的强平线呼应 */
+.trade__stat .trade__stop {
+  color: var(--c-loss);
+}
+
+.trade__close {
+  flex: 0 0 auto;
+  width: 168px;
+  margin-left: auto; /* 固定在右下角 */
+}
+
+/* 红色危险按钮（平仓 / 强平相关） */
+.btn--danger {
+  --btn-fg: #ffffff;
+  --btn-bd: transparent;
+  background: linear-gradient(135deg, #f0778c 0%, var(--c-loss) 100%);
+  box-shadow: 0 10px 22px -14px rgba(232, 93, 117, 0.95);
+}
+
+.btn--danger:hover:not(:disabled) {
+  filter: brightness(1.04);
+}
+
+/* ---------- 结算弹窗 ---------- */
+.dialog--result .dialog__body {
+  padding-top: 20px;
+}
+
+.result__amount {
+  font-size: 34px;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+/* 盈亏颜色 + 正负号同时表达（文档 §2.3） */
+.result__amount.value-profit {
+  color: var(--c-profit);
+}
+
+.result__amount.value-loss {
+  color: var(--c-loss);
+}
+
+.result__sub {
+  margin-top: 4px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--c-ink-faint);
+}
+
+.result__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 18px;
+  margin: 18px 0 0;
+}
+
+.result__grid > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed #f4e6ee;
+}
+
+.result__grid dt {
+  font-size: 11.5px;
+  color: var(--c-ink-faint);
+}
+
+.result__grid dd {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--c-ink);
+}
+
+.result__grid--wide {
+  grid-column: 1 / -1;
+}
+
+.dialog__foot--split {
+  justify-content: space-between;
+}
+
+/* ---------- 平仓确认弹窗 ---------- */
+.confirm__lead {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--c-ink);
+  text-align: center;
+}
+
+.confirm__note {
+  margin-top: 14px;
+  font-size: 11px;
+  text-align: center;
+  color: var(--c-ink-faint);
+}
+
+/* ---------- 强制平仓弹窗 ---------- */
+.dialog--liquidate {
+  width: min(600px, calc(100vw - 32px));
+}
+
+.dialog__head--alert {
+  background: linear-gradient(180deg, #fdeef1 0%, #ffffff 100%);
+  border-bottom-color: #f6d2da;
+}
+
+.dialog__head--alert .dialog__title {
+  color: #b23148;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dialog__head--alert .dialog__title::before {
+  content: "!";
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--c-loss);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.liq__lead {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--c-ink);
+}
+
+.liq__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 18px;
+  margin: 14px 0 0;
+}
+
+.liq__grid > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed #f4e6ee;
+}
+
+.liq__grid dt {
+  font-size: 11.5px;
+  color: var(--c-ink-faint);
+  white-space: nowrap;
+}
+
+.liq__grid dd {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--c-ink);
+  text-align: right;
+}
+
+.liq__grid--wide {
+  grid-column: 1 / -1;
+}
+
+.liq__grid--after {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #f7e7f0;
+}
+
+.liq__add {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 12px 14px;
+  border: 1px solid #f7dbe8;
+  border-radius: var(--r-md);
+  background: #fffafd;
+}
+
+.liq__quick {
+  display: flex;
+  gap: 6px;
+}
+
+.liq__quick .btn {
+  flex: 1 1 0;
+  justify-content: center;
+}
+
+.liq__fillnote {
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--c-ink-soft);
+}
+
+.liq__fillnote b {
+  font-size: 13px;
+  margin: 0 2px;
+}
+
+.liq__nofunds {  margin: 0;
+  padding: 8px 10px;
+  border-radius: var(--r-sm);
+  background: #fdeef1;
+  color: #b23148;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.liq__choice {
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--c-ink-soft);
+}
+
+/* 矮屏：收紧下单面板，避免出现滚动条 */
+@media (max-height: 720px) {
+  .panel--order {
+    gap: 8px;
+  }
+  .panel--order .panel__note {
+    display: none;
+  }
+  .moneybox {
+    gap: 3px;
+  }
+  .moneybox__value {
+    font-size: 15px;
+  }
+  .moneybox__value--pnl {
+    font-size: 13px;
+  }
+  .moneybox__row {
+    font-size: 11px;
+  }
+  .moneybox__row b {
+    font-size: 12px;
+  }
+}
+
+/* ---------- 尺寸适配 ---------- */
+@media (max-width: 1320px) {
+  .trade__main {
+    grid-template-columns: minmax(0, 1fr) 258px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .trade__main {
+    grid-template-columns: minmax(0, 1fr) 232px;
+  }
+  .trade__pairname {
+    display: none;
+  }
+  .trade__stats {
+    gap: 12px;
+  }
+  .trade__stat {
+    font-size: 10.5px;
+  }
+  .trade__stat b {
+    font-size: 12px;
+  }
+  .trade__close {
+    width: 132px;
+  }
+}

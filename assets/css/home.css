@@ -1,0 +1,242 @@
+/* ==========================================================================
+   home.css — 首页（文档 §8.1）
+   内容：Logo、副标题、开始游戏、游戏设置、游戏规则
+   不含任何角色、立绘、剧情元素
+   ========================================================================== */
+
+.home {
+  height: 100%;
+  display: grid;
+  place-items: center;
+  padding: var(--s-4);
+  overflow-y: auto;
+}
+
+.home__card {
+  position: relative;
+  width: min(620px, 100%);
+  padding: clamp(28px, 5vw, 52px) clamp(24px, 4vw, 48px) clamp(24px, 4vw, 40px);
+  text-align: center;
+  border: 1px solid rgba(245, 169, 200, 0.5);
+  border-radius: 36px;
+  background:
+    radial-gradient(120% 80% at 50% 0%, #ffffff 0%, #fffafd 58%, #fdf3f9 100%);
+  box-shadow:
+    0 40px 90px -50px rgba(41, 35, 49, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* 装饰 K 线 */
+.home__candles {
+  display: block;
+  width: 168px;
+  height: auto;
+  margin: 0 auto var(--s-2);
+  opacity: 0.95;
+}
+
+.ck-wick--up {
+  stroke: #9ed8c2;
+}
+.ck-wick--down {
+  stroke: #f3a8b6;
+}
+.ck-body--up {
+  fill: #cdeee2;
+}
+.ck-body--down {
+  fill: #fbd3dc;
+}
+
+/* 小标题 */
+.home__eyebrow {
+  margin-bottom: var(--s-2);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--c-ink-faint);
+}
+
+/* 主 Logo：FX♡LIFE */
+.home__logo {
+  font-size: clamp(44px, 8vw, 68px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.02em;
+}
+
+.home__logo-fx {
+  color: var(--c-ink);
+}
+
+.home__logo-heart {
+  color: var(--c-pink-deep);
+  font-size: 0.62em;
+  padding: 0 0.06em;
+  transform: translateY(-0.1em);
+  text-shadow: 0 6px 16px rgba(245, 169, 200, 0.85);
+  animation: heart-beat 3.2s ease-in-out infinite;
+}
+
+.home__logo-life {
+  background: linear-gradient(120deg, var(--c-pink-deep) 0%, var(--c-lilac-deep) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@keyframes heart-beat {
+  0%,
+  84%,
+  100% {
+    transform: translateY(-0.1em) scale(1);
+  }
+  90% {
+    transform: translateY(-0.1em) scale(1.1);
+  }
+  95% {
+    transform: translateY(-0.1em) scale(0.98);
+  }
+}
+
+/* 副标题 */
+.home__subtitle {
+  margin-top: var(--s-2);
+  font-size: clamp(13px, 1.6vw, 15px);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--c-ink-soft);
+}
+
+.home__tagline {
+  margin-top: var(--s-1);
+  font-size: 13.5px;
+  color: var(--c-ink-faint);
+  letter-spacing: 0.06em;
+}
+
+/* 按钮区 */
+.home__actions {
+  margin-top: clamp(24px, 4vh, 40px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-2);
+}
+
+.home__actions .btn--lg {
+  width: min(300px, 100%);
+}
+
+.home__actions-row {
+  display: flex;
+  gap: var(--s-1);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* 外链图标位（B站 / GitHub / 邮箱…） */
+.home__social {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: clamp(16px, 2.6vh, 24px);
+  min-height: 38px;
+}
+
+.social__link {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid #efdce8;
+  background: #ffffff;
+  color: #9a90a6;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--t-fast), color var(--t-base),
+    border-color var(--t-base), box-shadow var(--t-base), background-color var(--t-base);
+}
+
+.social__link:hover {
+  transform: translateY(-2px);
+  color: var(--c-pink-deep);
+  border-color: var(--c-pink);
+  background: #fffafd;
+  box-shadow: 0 10px 18px -12px rgba(236, 143, 182, 0.95);
+}
+
+/* 链接未配置时的占位态：虚线边框、不可点击 */
+.social__link.is-pending {
+  border-style: dashed;
+  border-color: #e7d8e3;
+  background: #fffafd;
+  color: #b6abc2;
+  cursor: default;
+}
+
+.social__link.is-pending:hover {
+  transform: none;
+  box-shadow: none;
+  color: #b6abc2;
+  border-color: #e7d8e3;
+  background: #fffafd;
+}
+
+.social__icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* 历史最佳一局（localStorage 里有记录才显示） */
+.home__best {
+  margin-top: clamp(10px, 1.6vh, 14px);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--c-ink-soft);
+}
+
+.home__best b {
+  font-size: 13px;
+}
+
+/* 脚注 */
+.home__footnote {
+  margin-top: clamp(14px, 2.2vh, 20px);
+  padding-top: var(--s-2);
+  border-top: 1px dashed #f2e2ec;
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  color: var(--c-ink-faint);
+}
+
+/* 矮屏幕（笔记本 768px 高以下）压缩留白，保证首页不出现滚动条 */
+@media (max-height: 720px) {
+  .home__candles {
+    width: 136px;
+    margin-bottom: 4px;
+  }
+  .home__card {
+    padding-top: 22px;
+    padding-bottom: 20px;
+  }
+  .home__actions {
+    margin-top: 18px;
+  }
+  .home__social {
+    margin-top: 12px;
+  }
+  .home__footnote {
+    margin-top: 12px;
+  }
+}

@@ -1,0 +1,11 @@
+# 统一用 LF：静态站点在 Linux 上构建/部署更省心
+* text=auto eol=lf
+
+# 二进制文件不要做换行转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary

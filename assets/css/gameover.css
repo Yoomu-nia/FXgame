@@ -1,0 +1,137 @@
+/* ==========================================================================
+   gameover.css — 一局结束页（文档 §8.6）
+   回合结算已改成「直接进入下一回合 + 一条提示」，不再有独立结算页。
+   ========================================================================== */
+
+.gameover {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(14px, 2.4vh, 24px);
+  width: min(820px, 100%);
+  margin: 0 auto;
+  padding: clamp(18px, 3vh, 36px) var(--s-4);
+  overflow-y: auto;
+}
+
+/* ---------- 头部：标题 + 大金额 ---------- */
+.gameover__head {
+  text-align: center;
+}
+
+.gameover__eyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--c-ink-faint);
+}
+
+.gameover__title {
+  margin-top: 4px;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.gameover__reason {
+  margin-top: 6px;
+  font-size: 12.5px;
+  color: var(--c-ink-faint);
+}
+
+.gameover__amount {
+  margin-top: 10px;
+  font-size: clamp(30px, 4.4vw, 46px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+
+.gameover__amount.value-profit {
+  color: var(--c-profit);
+}
+
+.gameover__amount.value-loss {
+  color: var(--c-loss);
+}
+
+.gameover__sub {
+  margin-top: 8px;
+  font-size: 12.5px;
+  color: var(--c-ink-soft);
+}
+
+/* ---------- 成绩面板 ---------- */
+.board {
+  width: 100%;
+  margin: 0;
+  padding: clamp(14px, 2vh, 20px) clamp(16px, 2.4vw, 26px);
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px clamp(18px, 3vw, 40px);
+  border: 1px solid var(--c-line);
+  border-radius: var(--r-lg);
+  background: #ffffff;
+  box-shadow: 0 22px 46px -34px rgba(41, 35, 49, 0.5);
+}
+
+.board__item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 7px;
+  border-bottom: 1px dashed #f4e6ee;
+}
+
+.board__item dt {
+  font-size: 11.5px;
+  color: var(--c-ink-faint);
+  white-space: nowrap;
+}
+
+.board__item dd {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--c-ink);
+  text-align: right;
+}
+
+/* ---------- 底部按钮 ---------- */
+.gameover__foot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s-2);
+}
+
+.gameover__foot .btn--lg {
+  min-width: 200px;
+}
+
+/* 矮屏：收紧留白，保证不出现整页滚动 */
+@media (max-height: 720px) {
+  .gameover {
+    gap: 12px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+  .board {
+    padding: 12px 18px;
+    gap: 6px 24px;
+  }
+  .board__item {
+    padding-bottom: 5px;
+  }
+}
+
+/* 窄屏：成绩单改成两列 */
+@media (max-width: 820px) {
+  .board {
+    grid-template-columns: 1fr 1fr;
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "kline-coaster",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "K线过山车 — 纯前端外汇杠杆模拟交易小游戏（无构建、无依赖）",
+  "scripts": {
+    "serve": "py -3 tools/serve.py 8130",
+    "selftest": "node tools/selftest.mjs && node tools/trading-selftest.mjs && node tools/stats-selftest.mjs && node tools/storage-selftest.mjs",
+    "calibrate": "node tools/calibrate.mjs"
+  }
+}
