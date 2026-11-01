@@ -172,7 +172,7 @@ FX网页小游戏/
 │     ├─ trade.js               交易主界面：状态机、计时、强平、开仓平仓、回合推进
 │     └─ gameover.js            一局结束页（成绩单）
 ├─ vendor/
-│  └─ lightweight-charts.standalone.production.js   TradingView Lightweight Charts v4.1.3（本地内置，离线可用）
+│  └─ lightweight-charts-4.1.3.standalone.production.js   TradingView Lightweight Charts v4.1.3（本地内置，离线可用）
 ├─ tools/
 │  ├─ serve.py                  本地开发服务器（禁用缓存，替代 python -m http.server）
 │  ├─ build.mjs                 生成部署用 dist/（只拷 index.html + assets + vendor + _headers）

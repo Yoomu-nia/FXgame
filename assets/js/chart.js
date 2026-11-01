@@ -46,7 +46,7 @@ export function isChartAvailable() {
 export function createChartView(container) {
   const LWC = getLib();
   if (!LWC) {
-    throw new Error("图表库未加载：请检查 vendor/lightweight-charts.standalone.production.js");
+    throw new Error("图表库未加载：请检查 vendor/lightweight-charts-4.1.3.standalone.production.js");
   }
 
   const chart = LWC.createChart(container, {
