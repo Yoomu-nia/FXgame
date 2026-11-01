@@ -81,13 +81,18 @@ export const DEFAULT_DIFFICULTY = "hard";
 export const DIFFICULTY_ORDER = ["normal", "hard", "extreme"];
 
 /**
- * 首页外链图标（B站、GitHub 等）
+ * 首页外链图标（B站、GitHub 等）—— 改这里就能填链接
  *
  * 【怎么填链接】
  * 把对应条目的 url 改成完整地址即可，例如：
  *   { id: "bilibili", label: "Bilibili", icon: "tv", url: "https://space.bilibili.com/123456" }
- * 填了 url → 渲染成可点击的图标，新标签页打开；
- * url 留空 → 渲染成**不可点击**的占位图标（只有鼠标悬停提示，点击没有任何反应）。
+ *   { id: "github",   label: "GitHub",   icon: "branch", url: "https://github.com/你的用户名" }
+ *   { id: "email",    label: "Email",    icon: "mail", url: "mailto:你的邮箱@example.com" }
+ *
+ * 规则：
+ *   填了 http(s):// 或 mailto: 的地址 → 渲染成可点击图标，新标签页打开；
+ *   url 留空 → 渲染成**不可点击**的虚线占位图标（点击没有任何反应）；
+ *   其它协议（例如 javascript:）会被当成"没填"，不会生成链接。
  *
  * icon 可选值见 app.js 的 ICONS：tv（B站）/ branch（GitHub）/ mail（邮箱）/ link（通用）
  * 想加平台就往这个数组里追加一条，首页会自动多出一个图标。

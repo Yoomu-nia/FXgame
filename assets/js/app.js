@@ -122,8 +122,9 @@ const ICONS = {
     </svg>`,
 };
 
+/** 只允许 http(s) 与 mailto，其它（例如 javascript:）一律当成"没填" */
 function isSafeUrl(url) {
-  return typeof url === "string" && /^https?:\/\//i.test(url.trim());
+  return typeof url === "string" && /^(https?:\/\/|mailto:)/i.test(url.trim());
 }
 
 function renderSocialLinks() {
