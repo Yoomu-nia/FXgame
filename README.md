@@ -43,6 +43,90 @@
 
 `index.html` 地址栏里如果显示的是 `file:///D:/...`，说明是直接双击打开的，页面会白屏或无样式，请按上面步骤用 `http://127.0.0.1:8130/` 打开。
 
+---
+
+## 一之二、部署到 GitHub + Cloudflare Pages
+
+游戏是纯静态的（HTML/CSS/JS + 一个本地图表库），**不需要服务器、不需要数据库、不需要构建工具**。
+仓库已经初始化好并做过一次提交，目录里也准备好了 `.gitignore`、`.gitattributes`、`_headers` 和 `tools/build.mjs`。
+
+> 我没法替你登录 GitHub / Cloudflare，下面是你需要手动执行的步骤。
+
+### 第 1 步：把仓库传到 GitHub
+
+在项目目录打开终端：
+
+```powershell
+cd "D:\DSHworkregion\FX网页小游戏"
+
+# 1) 在 GitHub 网页上先建一个空仓库（不要勾选 README/gitignore），记下地址
+# 2) 关联远程仓库（把地址换成你自己的）
+git remote add origin https://github.com/<你的用户名>/<仓库名>.git
+
+# 3) 主分支改名为 main 并推送
+git branch -M main
+git push -u origin main
+```
+
+推送时会要求登录：GitHub 已经不支持密码，需要 **Personal Access Token**（网页版 Settings → Developer settings → Personal access tokens → 勾选 `repo` 权限），把它当密码粘贴即可。
+
+**怎么判断成功**：刷新 GitHub 仓库页面，能看到 `index.html`、`assets/`、`vendor/` 等文件；页面顶部显示你刚才那条提交信息。
+
+### 第 2 步：Cloudflare Pages 连接仓库
+
+1. 登录 <https://dash.cloudflare.com/> → 左侧 **Workers & Pages** → **Create** → **Pages** → **Connect to Git**
+2. 授权 GitHub，选中刚才那个仓库
+3. 构建设置按下面填（**这一步别填错**）：
+
+   | 项目 | 值 |
+   | --- | --- |
+   | Framework preset | `None` |
+   | Build command | `node tools/build.mjs` |
+   | Build output directory | `dist` |
+
+4. 点 **Save and Deploy**，等 1～2 分钟
+
+**怎么判断成功**：Cloudflare 给出的 `https://<项目名>.pages.dev` 能打开首页，点「FX,简单！」能进游戏、K 线能画出来。
+
+> `tools/build.mjs` 只把 `index.html`、`assets/`、`vendor/`、`_headers` 拷进 `dist/`，
+> 所以**需求文档、开发脚本、截图不会被发布到公网**。
+> 如果你不想跑构建、直接把整个仓库发出去，就把 Build command 留空、输出目录填 `/`
+> —— 这也能跑，只是需求文档等文件也会一起公开。
+
+### 第 3 步：以后更新
+
+改完代码只要：
+
+```powershell
+git add -A
+git commit -m "说明这次改了什么"
+git push
+```
+
+Cloudflare 会自动重新构建部署，几十秒后线上就更新了。
+
+### 可选：自定义域名
+
+Cloudflare Pages 项目 → **Custom domains** → 添加你的域名（域名也托管在 Cloudflare 的话一条 CNAME 就完事），HTTPS 自动配好。
+
+### 可选：不用 GitHub，直接命令行上传
+
+装了 Node 之后也可以跳过仓库直接发：
+
+```powershell
+node tools/build.mjs
+npx wrangler pages deploy dist --project-name=kline-coaster
+```
+
+（`wrangler` 会引导你登录 Cloudflare。）
+
+### 部署后要注意的两件事
+
+1. **本地存档按域名隔离**：`pages.dev` 和本地 `127.0.0.1` 的 LocalStorage 是两套，成绩不互通（这是浏览器的正常行为）。
+2. **不要用 `file://` 打开线上文件**：`dist/index.html` 直接双击仍然会白屏，必须用 HTTP 打开（本地用 `tools/serve.py`，线上就是 Cloudflare 的地址）。
+
+---
+
 ### 复现一段固定行情（开发/测试用）
 
 地址栏加参数即可直接进入指定种子、指定难度的行情（进去就是未开仓状态）：
@@ -88,13 +172,16 @@ FX网页小游戏/
 │  └─ lightweight-charts.standalone.production.js   TradingView Lightweight Charts v4.1.3（本地内置，离线可用）
 ├─ tools/
 │  ├─ serve.py                  本地开发服务器（禁用缓存，替代 python -m http.server）
+│  ├─ build.mjs                 生成部署用 dist/（只拷 index.html + assets + vendor + _headers）
 │  ├─ selftest.mjs              行情模块自检（23 项）
 │  ├─ trading-selftest.mjs      交易与账务自检（69 项：盈亏公式、冻结释放、强平、追加）
 │  ├─ stats-selftest.mjs        对局与统计自检（30 项：胜率、连胜、5 回合推进、结束判定）
 │  ├─ storage-selftest.mjs      存档自检（16 项：读写、最近 10 局、损坏/配额/禁用降级）
 │  └─ calibrate.mjs             行情参数校准（3000 回合/难度，统计波动与强平概率）
 ├─ package.json                 仅用于声明 "type": "module"，让 Node 能跑上面的脚本；无任何依赖
-├─ .preview/                    开发期截图（不属于游戏，可随时删除）
+├─ .gitignore / .gitattributes  仓库忽略规则（.preview、dist、node_modules）与换行统一
+├─ _headers                     Cloudflare Pages 的响应头配置（安全头 + vendor 长缓存）
+├─ .preview/                    开发期截图（已加入 .gitignore，不会进仓库）
 └─ K线过山车_V1.0_DSH开发需求文档.md
 ```
 
