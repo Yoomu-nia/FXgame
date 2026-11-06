@@ -17,3 +17,11 @@ npm-debug.log*
 # 本地环境
 .env
 .env.local
+
+# 视频/大文件：不进仓库（会永久撑大 git 历史，GitHub 超过 50MB 还会警告）
+# 演示视频建议传 B 站 / YouTube，再在 README 里放链接
+*.mkv
+*.mp4
+*.mov
+*.avi
+*.webm
